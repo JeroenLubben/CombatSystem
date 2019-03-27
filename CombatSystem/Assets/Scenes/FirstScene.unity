@@ -229,7 +229,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.09846501}
+  m_Offset: {x: 0, y: -0.014208958}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -240,7 +240,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.80306995}
+  m_Size: {x: 1, y: 0.97158206}
   m_EdgeRadius: 0
 --- !u!1 &361359108
 GameObject:
@@ -386,10 +386,10 @@ GameObject:
   - component: {fileID: 593813242}
   - component: {fileID: 593813240}
   - component: {fileID: 593813239}
+  - component: {fileID: 593813241}
+  - component: {fileID: 593813246}
   - component: {fileID: 593813245}
   - component: {fileID: 593813244}
-  - component: {fileID: 593813246}
-  - component: {fileID: 593813241}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -533,10 +533,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb45d02f60538c74b8cab3c1f83852ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_JumpForce: 500
+  m_JumpForce: 200
   m_CrouchSpeed: 0.36
   m_MovementSmoothing: 0.05
-  m_AirControl: 1
+  m_AirControl: 0
   m_WhatIsGround:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -553,25 +553,11 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: CharacterController2D+BoolEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  knockBack: 4
-  knockBackLenght: 0.2
-  knockBackCount: 0.1
-  knockFromRight: 1
+  knockBack: 0
+  knockBackLenght: 0
+  knockBackCount: 0
+  knockFromRight: 0
 --- !u!114 &593813245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 593813238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13d3c505714a2a244a1d83bf5105fb44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 593813244}
-  movementSpeed: 20
-  AttackHitboxes: []
---- !u!114 &593813246
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -587,9 +573,23 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   attackPos: {fileID: 112106408}
-  attackRange: 0.45
+  attackRange: 0.53
   punchDamage: 10
   kickDamage: 20
+--- !u!114 &593813246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 593813238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13d3c505714a2a244a1d83bf5105fb44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 593813244}
+  movementSpeed: 20
+  AttackHitboxes: []
 --- !u!1 &1517648441
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,79 +2,120 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[System.Serializable]
 public class PlayerAttack : MonoBehaviour {
 
-    private float timeBetweenAttack;
+    private float PunchTimeBetweenAttack;
+    private float kickTimeBetweenAttack;
     public float startTimeBetweenAttack;
 
     public LayerMask whatIsEnemy;
     public Transform attackPos;
+
     public float attackRange;
     public int punchDamage;
     public int kickDamage;
 
     //private PlayerClass player;
 
-    private Animator anim;
+    private Animator animator;
+
+
+    private int noOfClicks;
+    private bool canClick; 
 
     private void Start()
     {
-        anim = GetComponent<Animator>();
+
+   
+        animator = GetComponent<Animator>();
         //player = GetComponent<PlayerClass>();
+
+        noOfClicks = 0;
+        canClick = true;
     }
 
-    void Update () {
-		
+    void Update() {
+
         //check if cooldown is finished and attack is selected
         //WILL NEED TO BE TWEAKED WITH COMBO
         //punch
-        if (timeBetweenAttack <= 0   &&
+        if (PunchTimeBetweenAttack <= 0 &&
             Input.GetButton("Punch"))
-            // && player.currentEnergy >= 10)
+        // && player.currentEnergy >= 10)
         {
             //Attack
-            anim.SetBool("isPunching", true);
-            Collider2D[] enemiesToHit = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemy); 
-            for(int i =0; i < enemiesToHit.Length; i++)
+            animator.SetTrigger("punch");
+            Collider2D[] enemiesToHit = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemy);
+            for (int i = 0; i < enemiesToHit.Length; i++)
             {
                 //enemiesToHit[i].GetComponent<Enemy>().takeDamage(punchDamage);
             }
 
             //player.currentEnergy -= 10;
-            timeBetweenAttack = startTimeBetweenAttack;
+            PunchTimeBetweenAttack = startTimeBetweenAttack;
         }//end if
         else
         {
-            anim.SetBool("isPunching", false);
-            timeBetweenAttack -= Time.deltaTime;
+            PunchTimeBetweenAttack -= Time.deltaTime;
         }
 
-        //kick
-        if (timeBetweenAttack <= 0   &&
-             Input.GetButton("Kick"))
-             //&& player.currentEnergy >= 20)
-        {
-            //Attack
-            anim.SetBool("isKicking", true);
-            Collider2D[] enemiesToHit = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemy);
-            for (int i = 0; i < enemiesToHit.Length; i++)
-            {
-                //enemiesToHit[i].GetComponent<Enemy>().takeDamage(kickDamage);
-            }
 
-            //player.currentEnergy -= 20;
-            timeBetweenAttack = startTimeBetweenAttack * 2;
-        }//end if
-        else
+        if ((kickTimeBetweenAttack > 0 && noOfClicks ==0))
         {
-            anim.SetBool("isKicking", false);
-            timeBetweenAttack -= Time.deltaTime;
+            kickTimeBetweenAttack -= Time.deltaTime;
+        }
+
+        else if (Input.GetButtonDown("Kick"))
+        {
+            ComboStarter();
+            kickTimeBetweenAttack = startTimeBetweenAttack * 2;
         }
 
 
     }
 
-    private void OnDrawGizmosSelected()
+    void ComboStarter()
+    {
+        if (canClick)
+        {
+            noOfClicks++;
+        }
+        Debug.Log(noOfClicks);
+
+        if (noOfClicks == 1)
+        {
+            animator.SetInteger("kickAttack", 1);
+        }
+    }
+
+    public void ComboCheck()
+    {
+
+        canClick = false;
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Kick1") && noOfClicks == 1)
+        {//If the first animation is still playing and only 1 click has happened, return to idle
+            animator.SetInteger("kickAttack", 0);
+            canClick = true;
+            noOfClicks = 0;
+        }
+        else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Kick1") && noOfClicks >= 2)
+        {//If the first animation is still playing and at least 2 clicks have happened, continue the combo          
+            animator.SetInteger("kickAttack", 2);
+            canClick = true;
+        }
+        else if(animator.GetCurrentAnimatorStateInfo(0).IsName("Kick2"))
+        {
+            animator.SetInteger("kickAttack", 0);
+            canClick = true;
+            noOfClicks = 0;
+        }
+    }
+
+
+ private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPos.position, attackRange);
