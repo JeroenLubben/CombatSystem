@@ -36,7 +36,8 @@ public class PlayerAttack : MonoBehaviour {
         canClick = true;
     }
 
-    void Update() {
+    void Update()
+    {
 
         //check if cooldown is finished and attack is selected
         //WILL NEED TO BE TWEAKED WITH COMBO
@@ -62,56 +63,18 @@ public class PlayerAttack : MonoBehaviour {
         }
 
 
-        if ((kickTimeBetweenAttack > 0 && noOfClicks ==0))
+        if(kickTimeBetweenAttack <= 0 &&
+           Input.GetButtonDown("Kick"))
+        {
+            animator.SetTrigger("kick");
+            kickTimeBetweenAttack = startTimeBetweenAttack * 2;
+        }
+        else
         {
             kickTimeBetweenAttack -= Time.deltaTime;
         }
 
-        else if (Input.GetButtonDown("Kick"))
-        {
-            ComboStarter();
-            kickTimeBetweenAttack = startTimeBetweenAttack * 2;
-        }
 
-
-    }
-
-    void ComboStarter()
-    {
-        if (canClick)
-        {
-            noOfClicks++;
-        }
-        Debug.Log(noOfClicks);
-
-        if (noOfClicks == 1)
-        {
-            animator.SetInteger("kickAttack", 1);
-        }
-    }
-
-    public void ComboCheck()
-    {
-
-        canClick = false;
-
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Kick1") && noOfClicks == 1)
-        {//If the first animation is still playing and only 1 click has happened, return to idle
-            animator.SetInteger("kickAttack", 0);
-            canClick = true;
-            noOfClicks = 0;
-        }
-        else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Kick1") && noOfClicks >= 2)
-        {//If the first animation is still playing and at least 2 clicks have happened, continue the combo          
-            animator.SetInteger("kickAttack", 2);
-            canClick = true;
-        }
-        else if(animator.GetCurrentAnimatorStateInfo(0).IsName("Kick2"))
-        {
-            animator.SetInteger("kickAttack", 0);
-            canClick = true;
-            noOfClicks = 0;
-        }
     }
 
 
